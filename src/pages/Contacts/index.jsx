@@ -1,7 +1,7 @@
-import { Box, IconButton, List, ListItem, TextField } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { Box, TextField } from "@mui/material";
+
 import { AccountCircle, Phone } from "@mui/icons-material";
+import ContactList from "../../components/ContactList";
 
 function Contatos() {
   return (
@@ -23,41 +23,9 @@ function Contatos() {
             variant="standard"
           />
         </Box>
+
       </Box>
-
-      <Box>
-        <List>
-          <ListItem>
-            Nome do contato
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </ListItem>
-
-          <ListItem>
-            Nome do contato
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </ListItem>
-
-          <ListItem>
-            Nome do contato
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </ListItem>
-        </List>
-      </Box>
+        <ContactList />
     </Box>
   );
 }
