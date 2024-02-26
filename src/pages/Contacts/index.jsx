@@ -1,4 +1,4 @@
-import { Box, TextField } from "@mui/material";
+import { Box, Container, TextField } from "@mui/material";
 
 import { AccountCircle, Phone } from "@mui/icons-material";
 import ContactList from "../../components/ContactList";
@@ -6,6 +6,9 @@ import ContactList from "../../components/ContactList";
 function Contatos() {
   return (
     <Box display="grid" flexDirection="column" alignItems="center">
+      <Container sx={{ display: "flex", justifyContent: "center" }}>
+        <h3>Lista de Contatos</h3>
+      </Container>
       <Box display="flex" flexDirection="row" sx={{ padding: "0.5rem" }}>
         <Box sx={{ display: "flex", alignItems: "flex-end", padding: "1rem" }}>
           <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
@@ -23,9 +26,8 @@ function Contatos() {
             variant="standard"
           />
         </Box>
-
       </Box>
-        <ContactList />
+      <ContactList />
     </Box>
   );
 }

@@ -10,36 +10,75 @@ import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import PhoneList from "../PhoneList";
+import ConfirmModal from "../ConfirmModal";
+import { api } from "../../Api/api";
+import EditModal from "../EditModal";
 
-function ContactItem({ name, phones }) {
+function ContactItem({ name, phones, contactId, onRemoved, setContacts }) {
+  const [openEdit, setOpenEdit] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [openRemove, setOpenRemove] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpenEdit(true);
+  };
 
   const handleChange = () => {
     setChecked((prev) => !prev);
   };
 
+  const handleOpenRemove = () => {
+    setOpenRemove(true);
+  };
+
+  const removeContact = async (id) => {
+    try {
+      await api.delete(`contato/${id}`);
+
+      onRemoved(true);
+    } catch (error) {
+      onRemoved(false);
+      console.log(error);
+    }
+  };
+
+  const handleClose = (confirm) => {
+    setOpenRemove(false);
+    confirm && removeContact(contactId);
+  };
+
   return (
     <Box sx={{ borderBottom: "1px solid gray" }}>
       <ListItem>
-        <FormControlLabel
-          control={<Switch checked={checked} onChange={handleChange} />}
-          label=""
-        />
-        <Box width="100%">
+        <div>
+          <span>Telefones</span>
+          <FormControlLabel
+            control={<Switch checked={checked} onChange={handleChange} />}
+            label=""
+          />
+        </div>
+        <Box display="flex" width="100%" justifyContent="center">
           <h3>{name}</h3>
         </Box>
 
         <Box width="50%" display="flex" justifyContent="end">
-          <IconButton>
+          <IconButton onClick={handleClickOpen}>
             <EditIcon />
           </IconButton>
 
-          <IconButton>
+          <IconButton onClick={handleOpenRemove}>
             <DeleteIcon />
           </IconButton>
         </Box>
       </ListItem>
       <PhoneList checked={checked} phones={phones} />
+      <ConfirmModal open={openRemove} onClose={handleClose} />
+      <EditModal
+        contactId={contactId}
+        open={openEdit}
+        setOpen={setOpenEdit}
+        setContacts={setContacts}
+      />
     </Box>
   );
 }
@@ -49,4 +88,7 @@ export default ContactItem;
 ContactItem.propTypes = {
   name: PropTypes.string,
   phones: PropTypes.array,
+  contactId: PropTypes.number,
+  onRemoved: PropTypes.func,
+  setContacts: PropTypes.func,
 };

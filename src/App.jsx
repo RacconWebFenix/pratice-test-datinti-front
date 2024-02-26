@@ -6,6 +6,8 @@ import Navigation from "./components/Navigation";
 import Contatos from "./pages/Contacts";
 import Register from "./pages/Register";
 
+
+
 function App() {
   const [value, setValue] = useState(0);
 
@@ -34,6 +36,7 @@ function App() {
         flexDirection="column"
         ref={ref}
       >
+
         {value === 0 && <Home />}
 
         {value === 1 && <Contatos />}

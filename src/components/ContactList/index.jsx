@@ -1,11 +1,13 @@
-import { Box, Container, List } from "@mui/material";
+import { Alert, Box, Container, List, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { api } from "../../Api/api";
 import ContactItem from "../ContactItem";
 import PropTypes from "prop-types";
 
-function ContactList({ filtredData, clearName, clearPhone, setFilter }) {
+function ContactList() {
   const [contacts, setContacts] = useState([]);
+  const [onRemoved, setOnRemoved] = useState(false);
+  const [openSnack, setOpenSnack] = useState(false);
 
   const getData = async () => {
     try {
@@ -15,45 +17,54 @@ function ContactList({ filtredData, clearName, clearPhone, setFilter }) {
     }
   };
 
-  const removeContact = async (id) => {
-    try {
-      await api.delete(`contato/${id}`);
-      // fazer tratativa de sucesso!
-      await api.get("contato").then((response) => setContacts(response.data));
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    handleRemove();
+  }, [onRemoved]);
+
+  const handleRemove = async () => {
+    onRemoved && setOpenSnack(true);
+    onRemoved === true &&
+      (await api.get("contato").then((response) => setContacts(response.data)));
+
+    setOnRemoved(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {}, [openSnack]);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
     }
+
+    setOpenSnack(false);
   };
-
-  const apllyFilter = () => {
-    filtredData.length === 0 ? getData() : setContacts(filtredData);
-  };
-
-  const clearFilters = () => {
-    clearName || clearPhone ? getData() : setFilter([]);
-  };
-
-  useEffect(() => {
-    apllyFilter();
-  }, [filtredData]);
-
-  useEffect(() => {
-    clearFilters();
-  }, [clearName, clearPhone, setFilter]);
 
   return (
     <Box>
       <List>
-        <Container sx={{ display: "flex", justifyContent: "center" }}>
-          <h3>Lista de Contatos</h3>
-        </Container>
+        <Snackbar
+          open={openSnack}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="success">
+            Contato removido com sucesso!
+          </Alert>
+        </Snackbar>
+
         <Container>
           {contacts.map((c, i) => (
             <div key={i}>
               <ContactItem
                 name={c.nome}
                 phones={c.telefone}
-                removeContact={() => removeContact(c.id)}
+                contactId={c.id}
+                onRemoved={setOnRemoved}
+                setContacts={setContacts}
               />
             </div>
           ))}
