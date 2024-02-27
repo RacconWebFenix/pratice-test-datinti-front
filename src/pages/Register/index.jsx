@@ -7,7 +7,9 @@ import {
   Box,
   Snackbar,
   Alert,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { api } from "../../Api/api";
 
 function Register() {
@@ -189,31 +191,35 @@ function Register() {
             </Button>
           </Grid>
           {formData.telefones.map((telefone, index) => (
-            <Grid item xs={12} key={index}>
-              <TextField
-                fullWidth
-                label={`Telefone ${index + 1}`}
-                name="telefones"
-                value={telefone}
-                onChange={(e) => handleChange(e, index)}
-                error={errors[`telefones${index}`] ? true : false}
-                helperText={errors[`telefones${index}`]}
-              />
-              <Grid
-                item
-                xs={12}
+            <Grid
+              item
+              xs={12}
+              key={index}
+              display="flex"
+              flexDirection="column"
+            >
+              <Box
                 display="flex"
-                flexDirection="row"
-                justifyContent="end"
+                justifyContent="space-between"
+                justifyItems="center"
               >
-                <Button
-                  sx={{ mt: "0.5rem" }}
-                  variant="outlined"
+                <TextField
+                  fullWidth
+                  label={`Telefone ${index + 1}`}
+                  name="telefones"
+                  value={telefone}
+                  onChange={(e) => handleChange(e, index)}
+                  error={errors[`telefones${index}`] ? true : false}
+                  helperText={errors[`telefones${index}`]}
+                />
+
+                <IconButton
+                  sx={{ ml: "1rem" }}
                   onClick={() => handleRemoveTelefone(index)}
                 >
-                  Remover
-                </Button>
-              </Grid>
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
             </Grid>
           ))}
 

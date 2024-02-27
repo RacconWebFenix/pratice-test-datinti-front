@@ -14,7 +14,7 @@ import ConfirmModal from "../ConfirmModal";
 import { api } from "../../Api/api";
 import EditModal from "../EditModal";
 
-function ContactItem({ name, phones, contactId, onRemoved, setContacts }) {
+function ContactItem({ name, phones, contactId, onRemoved, getData }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [checked, setChecked] = useState(false);
   const [openRemove, setOpenRemove] = useState(false);
@@ -77,7 +77,7 @@ function ContactItem({ name, phones, contactId, onRemoved, setContacts }) {
         contactId={contactId}
         open={openEdit}
         setOpen={setOpenEdit}
-        setContacts={setContacts}
+        getAllData={getData}
       />
     </Box>
   );
@@ -90,5 +90,5 @@ ContactItem.propTypes = {
   phones: PropTypes.array,
   contactId: PropTypes.number,
   onRemoved: PropTypes.func,
-  setContacts: PropTypes.func,
+  getData: PropTypes.func,
 };

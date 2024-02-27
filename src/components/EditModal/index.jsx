@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { api } from "../../Api/api";
 
-function EditModal({ contactId, open, setOpen, setContacts }) {
+function EditModal({ contactId, open, setOpen, getAllData }) {
   const [formData, setFormData] = useState({
     nome: "",
     idade: "",
@@ -38,11 +38,7 @@ function EditModal({ contactId, open, setOpen, setContacts }) {
 
   const handleClose = async () => {
     setOpen(false);
-    try {
-      await api.get("contato").then((response) => setContacts(response.data));
-    } catch (error) {
-      console.log(error);
-    }
+    getAllData()
   };
 
   const handleChange = (e) => {
@@ -96,7 +92,7 @@ function EditModal({ contactId, open, setOpen, setContacts }) {
         }
         break;
       case "idade":
-        if (isNaN(value) || parseInt(value) <= 0) {
+        if (isNaN(value) || parseInt(value) <= 0 || !value) {
           errors[name] = "A idade deve ser um número positivo";
         }
         break;
@@ -155,6 +151,8 @@ function EditModal({ contactId, open, setOpen, setContacts }) {
         <Button onClick={handleClose}>Cancelar</Button>
         <Button type="submit">Salvar</Button>
       </DialogActions>
+
+   
     </Dialog>
   );
 }
@@ -165,5 +163,5 @@ EditModal.propTypes = {
   contactId: PropTypes.number,
   open: PropTypes.bool,
   setOpen: PropTypes.func,
-  setContacts: PropTypes.func,
+  getAllData: PropTypes.func,
 };

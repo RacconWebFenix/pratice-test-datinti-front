@@ -1,21 +1,23 @@
 import { Alert, Box, Container, List, Snackbar } from "@mui/material";
 import { useEffect, useState } from "react";
-import { api } from "../../Api/api";
 import ContactItem from "../ContactItem";
 import PropTypes from "prop-types";
 
-function ContactList() {
-  const [contacts, setContacts] = useState([]);
+function ContactList({ data, getData }) {
   const [onRemoved, setOnRemoved] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
 
-  const getData = async () => {
-    try {
-      await api.get("contato").then((response) => setContacts(response.data));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     await api
+  //       .get("contato")
+  //       .then((response) =>
+  //         setContacts(filtredData.length === 0 ? response.data : filtredData)
+  //       );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     handleRemove();
@@ -23,17 +25,10 @@ function ContactList() {
 
   const handleRemove = async () => {
     onRemoved && setOpenSnack(true);
-    onRemoved === true &&
-      (await api.get("contato").then((response) => setContacts(response.data)));
+    onRemoved === true && getData();
 
     setOnRemoved(false);
   };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {}, [openSnack]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -57,14 +52,14 @@ function ContactList() {
         </Snackbar>
 
         <Container>
-          {contacts.map((c, i) => (
+          {data.map((c, i) => (
             <div key={i}>
               <ContactItem
                 name={c.nome}
                 phones={c.telefone}
                 contactId={c.id}
                 onRemoved={setOnRemoved}
-                setContacts={setContacts}
+                getData={getData}
               />
             </div>
           ))}
@@ -77,8 +72,6 @@ function ContactList() {
 export default ContactList;
 
 ContactList.propTypes = {
-  filtredData: PropTypes.array,
-  clearName: PropTypes.bool,
-  clearPhone: PropTypes.bool,
-  setFilter: PropTypes.func,
+  data: PropTypes.array,
+  getData: PropTypes.func,
 };
