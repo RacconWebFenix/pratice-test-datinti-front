@@ -11,12 +11,15 @@ import {
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { api } from "../../Api/api";
+import NotificationCustom from "../NotificationCustom";
 
 function EditModal({ contactId, open, setOpen, getAllData }) {
   const [formData, setFormData] = useState({
     nome: "",
     idade: "",
   });
+
+  const [openSnack, setOpenSnack] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -38,7 +41,7 @@ function EditModal({ contactId, open, setOpen, getAllData }) {
 
   const handleClose = async () => {
     setOpen(false);
-    getAllData()
+    getAllData();
   };
 
   const handleChange = (e) => {
@@ -65,7 +68,9 @@ function EditModal({ contactId, open, setOpen, getAllData }) {
       };
 
       await api.put(`contato/${contactId}`, payload);
-      console.log(payload); // Aqui você pode enviar os dados para onde desejar
+
+      setOpenSnack(true);
+
       handleClose();
     } else {
       setErrors(formErrors);
@@ -108,52 +113,58 @@ function EditModal({ contactId, open, setOpen, getAllData }) {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      PaperProps={{
-        component: "form",
-        onSubmit: handleSubmit,
-      }}
-    >
-      <DialogTitle>Editar Contato</DialogTitle>
-      <DialogContent>
-        <DialogContentText sx={{ mb: "0.5rem" }}>
-          Editar detalhes do contato:
-        </DialogContentText>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Nome"
-              name="nome"
-              value={formData.nome}
-              onChange={handleChange}
-              error={errors.nome ? true : false}
-              helperText={errors.nome}
-            />
+    <>
+      <NotificationCustom
+        description={"Contato atualizado com sucesso."}
+        setOpenSnack={setOpenSnack}
+        openSnack={openSnack}
+        severity="success"
+      />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          component: "form",
+          onSubmit: handleSubmit,
+        }}
+      >
+        <DialogTitle>Editar Contato</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: "0.5rem" }}>
+            Editar detalhes do contato:
+          </DialogContentText>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Nome"
+                name="nome"
+                value={formData.nome}
+                onChange={handleChange}
+                error={errors.nome ? true : false}
+                helperText={errors.nome}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Idade"
+                name="idade"
+                type="number"
+                value={formData.idade}
+                onChange={handleChange}
+                error={errors.idade ? true : false}
+                helperText={errors.idade}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Idade"
-              name="idade"
-              type="number"
-              value={formData.idade}
-              onChange={handleChange}
-              error={errors.idade ? true : false}
-              helperText={errors.idade}
-            />
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancelar</Button>
-        <Button type="submit">Salvar</Button>
-      </DialogActions>
-
-   
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancelar</Button>
+          <Button type="submit">Salvar</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 

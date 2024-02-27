@@ -14,10 +14,12 @@ import ConfirmModal from "../ConfirmModal";
 import { api } from "../../Api/api";
 import EditModal from "../EditModal";
 
-function ContactItem({ name, phones, contactId, onRemoved, getData }) {
+
+function ContactItem({ name, age, phones, contactId, onRemoved, getData }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [checked, setChecked] = useState(false);
   const [openRemove, setOpenRemove] = useState(false);
+
 
   const handleClickOpen = () => {
     setOpenEdit(true);
@@ -57,10 +59,16 @@ function ContactItem({ name, phones, contactId, onRemoved, getData }) {
             label=""
           />
         </div>
-        <Box display="flex" width="100%" justifyContent="center">
+        <Box
+          display="flex"
+          width="100%"
+          justifyContent="center"
+          sx={{ ml: "1rem" }}
+        >
           <h3>{name}</h3>
         </Box>
-
+        <p style={{ marginRight: "0.5rem", marginLeft: "0.5rem" }}>Idade:</p>
+        <h3>{age}</h3>
         <Box width="50%" display="flex" justifyContent="end">
           <IconButton onClick={handleClickOpen}>
             <EditIcon />
@@ -79,6 +87,7 @@ function ContactItem({ name, phones, contactId, onRemoved, getData }) {
         setOpen={setOpenEdit}
         getAllData={getData}
       />
+     
     </Box>
   );
 }
@@ -91,4 +100,5 @@ ContactItem.propTypes = {
   contactId: PropTypes.number,
   onRemoved: PropTypes.func,
   getData: PropTypes.func,
+  age: PropTypes.number,
 };

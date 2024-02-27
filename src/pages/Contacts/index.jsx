@@ -37,7 +37,13 @@ function Contatos() {
   };
 
   return (
-    <Box display="grid" flexDirection="column" alignItems="center">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      textAlign="center"
+      justifyContent="center"
+    >
       <Container sx={{ display: "flex", justifyContent: "center" }}>
         <h3>Lista de Contatos</h3>
       </Container>
@@ -63,6 +69,7 @@ function Contatos() {
           />
         </Box>
       </Box>
+
       <ContactList data={data} getData={handleGetData} />
     </Box>
   );

@@ -8,6 +8,9 @@ export default function Home() {
       flexDirection="column"
       alignItems="center"
       textAlign="center"
+      justifyContent="center"
+      flexGrow={1}
+      height="90vh"
     >
       <Box>
         <h1>Teste para Seleção – Desenvolvimento</h1>

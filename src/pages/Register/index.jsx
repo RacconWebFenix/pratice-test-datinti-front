@@ -5,12 +5,11 @@ import {
   Grid,
   Container,
   Box,
-  Snackbar,
-  Alert,
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { api } from "../../Api/api";
+import NotificationCustom from "../../components/NotificationCustom";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -22,14 +21,6 @@ function Register() {
   const [openSnack, setOpenSnack] = useState(false);
 
   const [errors, setErrors] = useState({});
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnack(false);
-  };
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -230,11 +221,12 @@ function Register() {
           </Grid>
         </Grid>
       </form>
-      <Snackbar open={openSnack} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          Contato adicionado com sucesso.
-        </Alert>
-      </Snackbar>
+      <NotificationCustom
+        description={"Contato adicionado com sucesso."}
+        setOpenSnack={setOpenSnack}
+        openSnack={openSnack}
+        severity="success"
+      />
     </Container>
   );
 }
