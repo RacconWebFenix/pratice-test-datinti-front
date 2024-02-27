@@ -1,4 +1,4 @@
-import { Box, Container, TextField } from "@mui/material";
+import { Box, CircularProgress, Container, TextField } from "@mui/material";
 import { AccountCircle, Phone } from "@mui/icons-material";
 import ContactList from "../../components/ContactList";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { api } from "../../Api/api";
 
 function Contatos() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [textValue, setTextValue] = useState({
     name: "",
     phone: "",
@@ -23,16 +24,21 @@ function Contatos() {
   }, [textValue.name, textValue.phone]);
 
   const handleGetData = async () => {
-    if (textValue.name.length > 0) {
-      await api
-        .get(`contato/search/${textValue.name}`)
-        .then((res) => setData(res.data));
-    } else if (textValue.phone.length > 0) {
-      await api
-        .get(`contato/telefone/${textValue.phone}`)
-        .then((res) => setData(res.data));
-    } else {
-      await api.get(`contato`).then((res) => setData(res.data));
+    setLoading(true);
+    try {
+      let responseData;
+      if (textValue.name.length > 0) {
+        responseData = await api.get(`contato/search/${textValue.name}`);
+      } else if (textValue.phone.length > 0) {
+        responseData = await api.get(`contato/telefone/${textValue.phone}`);
+      } else {
+        responseData = await api.get(`contato`);
+      }
+      setData(responseData.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,8 +75,11 @@ function Contatos() {
           />
         </Box>
       </Box>
-
-      <ContactList data={data} getData={handleGetData} />
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <ContactList data={data} getData={handleGetData} />
+      )}
     </Box>
   );
 }
